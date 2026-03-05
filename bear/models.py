@@ -16,6 +16,7 @@ class Note:
     creation_date: datetime
     modification_date: datetime
     tags: list[Tag] = field(default_factory=list)
+    text: str = field(default_factory=str)
 
 
 @dataclass

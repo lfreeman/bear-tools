@@ -276,3 +276,23 @@ def get_recent_notes(conn: sqlite3.Connection, since: datetime) -> list[Note]:
         )
         for row in rows
     ]
+
+
+def get_note(conn: sqlite3.Connection, identifier: str) -> Note:
+    """Get note"""
+    cursor = conn.execute(
+        """
+        SELECT ZTITLE, ZUNIQUEIDENTIFIER, ZCREATIONDATE, ZMODIFICATIONDATE, ZTEXT 
+        FROM ZSFNOTE WHERE ZUNIQUEIDENTIFIER = :identifier
+        """,
+        {"identifier": identifier},
+    )
+    row = cursor.fetchone()
+
+    return Note(
+        title=row[0],
+        identifier=row[1],
+        creation_date=apple_timestamp_to_datetime(row[2]),
+        modification_date=apple_timestamp_to_datetime(row[3]),
+        text=row[4],
+    )

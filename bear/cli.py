@@ -154,3 +154,9 @@ def summary(
 
         notes = database.get_recent_notes(conn, since)
         display_notes(notes, output)
+
+
+@app.command()
+def import_file(file_path: str):
+    """create note from file"""
+    writer.import_file(file_path)

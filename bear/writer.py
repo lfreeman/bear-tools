@@ -1,5 +1,6 @@
 import subprocess
 import time
+from pathlib import Path
 from urllib.parse import quote, urlencode
 
 
@@ -10,6 +11,18 @@ def create_note(title: str, text: str = "", tags: list[str] | None = None) -> No
     params_urlencode = urlencode(params, quote_via=quote)
     url = f"bear://x-callback-url/create?{params_urlencode}"
     run(url)
+
+
+def import_file(file_path: str) -> None:
+    path = Path(file_path)
+    content = path.read_text()
+    title = path.stem  # fallback
+
+    for line in content.splitlines():
+        if line.startswith("# "):
+            title = line[2:].strip()
+            break
+    create_note(title="", text=content)
 
 
 def trash_note(note_id: str) -> None:
